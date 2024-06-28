@@ -52,7 +52,7 @@ function showPaperDetails(entry) {
 async function loadPDF(url) {
     try {
         const secureUrl = url.replace('http://', 'https://');
-        const loadingTask = pdfjsLib.getDocument(url);
+        const loadingTask = pdfjsLib.getDocument(secureUrl);
         const pdf = await loadingTask.promise;
         
         pdfViewer.innerHTML = '';
