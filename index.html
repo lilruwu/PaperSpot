@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Paper Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Academic Paper Viewer</h1>
+    </header>
+    <main>
+        <section id="search-section">
+            <input type="text" id="search-input" placeholder="Enter keyword">
+            <button id="search-button">Search</button>
+        </section>
+        <section id="filter-section">
+            <h2>Filter by Source:</h2>
+            <div id="source-filters">
+                <label><input type="checkbox" name="source" value="arxiv" checked> arXiv</label>
+                <label><input type="checkbox" name="source" value="plos" checked> PLOS ONE</label>
+                <label><input type="checkbox" name="source" value="doaj" checked> DOAJ</label>
+            </div>
+        </section>
+        <section id="results-section">
+            <div id="paper-list">
+                <h2>Search Results</h2>
+                <ul id="results-list"></ul>
+            </div>
+            <div id="paper-details">
+                <h2>Paper Details</h2>
+                <div id="paper-summary"></div>
+            </div>
+        </section>
+        <section id="pdf-section">
+            <h2>PDF Viewer</h2>
+            <div id="pdf-viewer"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Academic Paper Viewer</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
