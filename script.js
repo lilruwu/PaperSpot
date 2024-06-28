@@ -106,7 +106,9 @@ function showPaperDetails(paper) {
 
 async function loadPDF(url) {
     try {
-        const loadingTask = pdfjsLib.getDocument(url);
+        const secureUrl = url.replace('http://', 'https://');
+        console.log('Loading PDF:', secureUrl);
+        const loadingTask = pdfjsLib.getDocument(secureUrl);
         const pdf = await loadingTask.promise;
         
         pdfViewer.innerHTML = '';
