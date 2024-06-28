@@ -14,7 +14,7 @@ searchInput.addEventListener('keypress', function(e) {
 async function searchPapers() {
     const keyword = searchInput.value;
     try {
-        const response = await fetch(`http://export.arxiv.org/api/query?search_query=all:${keyword}&start=0&max_results=10`);
+        const response = await fetch(`https://export.arxiv.org/api/query?search_query=all:${keyword}&start=0&max_results=10`);
         const xmlText = await response.text();
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -51,6 +51,7 @@ function showPaperDetails(entry) {
 
 async function loadPDF(url) {
     try {
+        const secureUrl = url.replace('http://', 'https://');
         const loadingTask = pdfjsLib.getDocument(url);
         const pdf = await loadingTask.promise;
         
