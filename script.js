@@ -38,7 +38,7 @@ async function searchSource(source, keyword) {
     let url;
     switch (source) {
         case 'arxiv':
-            url = `http://export.arxiv.org/api/query?search_query=all:${keyword}&start=0&max_results=10`;
+            url = `https://export.arxiv.org/api/query?search_query=all:${keyword}&start=0&max_results=10`;
             break;
         case 'plos':
             url = `https://api.plos.org/search?q=title:${keyword}&fl=id,title,author,abstract&wt=json`;
