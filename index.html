@@ -117,7 +117,7 @@ function parseResults(source, data) {
             return Array.from(entries).map(entry => ({
                 title: entry.getElementsByTagName('title')[0].textContent,
                 summary: entry.getElementsByTagName('summary')[0].textContent,
-                pdfUrl: entry.querySelector('link[title="pdf"]').getAttribute('href'),
+                pdfUrl: entry.querySelector('link[title="pdf"]').getAttribute('href').replace('http://', 'https://'),
                 source: 'arXiv'
             }));
         case 'plos':
@@ -131,7 +131,7 @@ function parseResults(source, data) {
             return data.results.map(paper => ({
                 title: paper.bibjson.title,
                 summary: paper.bibjson.abstract,
-                pdfUrl: paper.bibjson.link.find(link => link.type === 'fulltext').url,
+                pdfUrl: paper.bibjson.link.find(link => link.type === 'fulltext').url.replace('http://', 'https://'),
                 source: 'DOAJ'
             }));
     }
