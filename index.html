@@ -15,6 +15,21 @@
             <input type="text" id="search-input" placeholder="Enter keyword">
             <button id="search-button">Search</button>
             <div id="filter-options">
+                <fieldset>
+                    <legend>Sources:</legend>
+                    <div>
+                        <input type="checkbox" id="arxiv-source" name="source" value="arxiv" checked>
+                        <label for="arxiv-source">arXiv</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hal-source" name="source" value="hal" checked>
+                        <label for="hal-source">HAL</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="paperswithcode-source" name="source" value="paperswithcode" checked>
+                        <label for="paperswithcode-source">Papers with Code</label>
+                    </div>
+                </fieldset>
                 <label for="sort-by">Sort by:</label>
                 <select id="sort-by">
                     <option value="citations">Relevance</option>
@@ -35,6 +50,11 @@
             <div id="paper-details">
                 <h2>Paper Details</h2>
                 <div id="paper-summary"></div>
+                <div id="repository-info" style="display: none;">
+                    <h3>Repository Information</h3>
+                    <p id="repo-url"></p>
+                    <p id="repo-stars"></p>
+                </div>
                 <button id="preview-paper">Open Full Paper</button>
                 <div id="citation-generator">
                     <h3>Citation</h3>
