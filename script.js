@@ -101,6 +101,7 @@ async function searchHAL(keyword, fromDate, toDate) {
     const response = await fetch(`https://api.archives-ouvertes.fr/search/?q=${keyword}&wt=json&fl=title_s,authFullName_s,publicationDate_s,abstract_s,fileMain_s,citationFull_s&fq=submittedDate_s:[${fromDate ? fromDate.toISOString() : '*'} TO ${toDate ? toDate.toISOString() : '*'}]`);
     const data = await response.json();
     
+    console.log(data.response.docs);
     return data.response.docs.map(doc => ({
         source: 'HAL',
         title: Array.isArray(doc.title_s) ? doc.title_s.join('') : doc.title_s,
@@ -108,13 +109,13 @@ async function searchHAL(keyword, fromDate, toDate) {
         published: new Date(doc.publicationDate_s),
         summary: doc.abstract_s,
         pdfUrl: doc.fileMain_s,
-        citations: Math.floor(Math.random() * 1000) // Simulated citation count
+        citations: 0 // Simulated citation count
     }));
 }    
 
 async function searchPapersWithCode(keyword, fromDate, toDate) {
     const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-    const apiUrl = `https://paperswithcode.com/api/v1/papers/?q=${keyword}&items_per_page=10`;
+    const apiUrl = `https://paperswithcode.com/api/v1/search/?q=${keyword}&items_per_page=10`;
     const response = await fetch(corsProxy + apiUrl, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -122,17 +123,18 @@ async function searchPapersWithCode(keyword, fromDate, toDate) {
     });
     const data = await response.json();
     
-    return data.results.map(paper => ({
+    return data.results.map(result => ({
         source: 'Papers with Code',
-        title: paper.title,
-        authors: paper.authors,
-        published: new Date(paper.published),
-        summary: paper.abstract,
-        pdfUrl: paper.url_pdf,
-        citations: paper.citations || 0, // Use actual citations if available, otherwise simulate
-        repoUrl: paper.github_url,
-        repoName: paper.github_url ? paper.github_url.split('/').pop() : '',
-        stars: paper.github_stars || 0
+        title: result.paper.title,
+        authors: result.paper.authors,
+        published: new Date(result.paper.published),
+        summary: result.paper.abstract,
+        pdfUrl: result.paper.url_pdf,
+        citations: result.repository ? result.repository.stars : 0, // Use repository stars as citations
+        repoUrl: result.repository ? result.repository.url : null,
+        repoName: result.repository ? result.repository.name : null,
+        repoDescription: result.repository ? result.repository.description : null,
+        stars: result.repository ? result.repository.stars : 0
     })).filter(paper => {
         if (fromDate && paper.published < fromDate) return false;
         if (toDate && paper.published > toDate) return false;
@@ -177,7 +179,7 @@ function showPaperDetails(index) {
         <p><strong>Source:</strong> ${currentPaper.source}</p>
         <p><strong>Authors:</strong> ${currentPaper.authors.join(', ')}</p>
         <p><strong>Published:</strong> ${currentPaper.published.toLocaleDateString()}</p>
-        <p><strong>Citations:</strong> ${currentPaper.citations}</p>
+        <p><strong>Citations/Stars:</strong> ${currentPaper.citations}</p>
         <h4>Abstract</h4>
         <p>${currentPaper.summary}</p>
     `;
@@ -187,7 +189,7 @@ function showPaperDetails(index) {
     const repoInfo = document.getElementById('repository-info');
     if (currentPaper.source === 'Papers with Code' && currentPaper.repoUrl) {
         document.getElementById('repo-url').innerHTML = `<strong>Repository:</strong> <a href="${currentPaper.repoUrl}" target="_blank">${currentPaper.repoName}</a>`;
-        document.getElementById('repo-stars').innerHTML = `<strong>Stars:</strong> ${currentPaper.stars}`;
+        document.getElementById('repo-stars').innerHTML = `<strong>⭐</strong> ${currentPaper.stars}`;
         repoInfo.style.display = 'block';
     } else {
         repoInfo.style.display = 'none';

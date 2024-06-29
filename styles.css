@@ -81,9 +81,22 @@ h1, h2, h3 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+#paper-list {
+    display: flex;
+    flex-direction: column;
+}
+
+#results-list-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ecf0f1;
+    border-radius: 4px;
+}
+
 #results-list {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 #results-list li {
@@ -95,6 +108,27 @@ h1, h2, h3 {
 
 #results-list li:hover {
     background-color: #ecf0f1;
+}
+
+#results-list li:last-child {
+    border-bottom: none;
+}
+
+#results-list-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#results-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#results-list-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#results-list-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 #citation-generator {
