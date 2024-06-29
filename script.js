@@ -112,33 +112,33 @@ async function searchHAL(keyword, fromDate, toDate) {
     }));
 }    
 
-// async function searchPapersWithCode(keyword, fromDate, toDate) {
-//     const corsProxy = 'https://test.cors.workers.dev/?';
-//     const apiUrl = `https://paperswithcode.com/api/v1/papers/?q=${keyword}&items_per_page=100`;
-//     const response = await fetch(corsProxy + apiUrl, {
-//         headers: {
-//             'X-Requested-With': 'XMLHttpRequest'
-//         }
-//     });
-//     const data = await response.json();
+async function searchPapersWithCode(keyword, fromDate, toDate) {
+    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const apiUrl = `https://paperswithcode.com/api/v1/papers/?q=${keyword}&items_per_page=10`;
+    const response = await fetch(corsProxy + apiUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+    const data = await response.json();
     
-//     return data.results.map(paper => ({
-//         source: 'Papers with Code',
-//         title: paper.title,
-//         authors: paper.authors,
-//         published: new Date(paper.published),
-//         summary: paper.abstract,
-//         pdfUrl: paper.url_pdf,
-//         citations: paper.citations || 0, // Use actual citations if available, otherwise simulate
-//         repoUrl: paper.github_url,
-//         repoName: paper.github_url ? paper.github_url.split('/').pop() : '',
-//         stars: paper.github_stars || 0
-//     })).filter(paper => {
-//         if (fromDate && paper.published < fromDate) return false;
-//         if (toDate && paper.published > toDate) return false;
-//         return true;
-//     });
-// }
+    return data.results.map(paper => ({
+        source: 'Papers with Code',
+        title: paper.title,
+        authors: paper.authors,
+        published: new Date(paper.published),
+        summary: paper.abstract,
+        pdfUrl: paper.url_pdf,
+        citations: paper.citations || 0, // Use actual citations if available, otherwise simulate
+        repoUrl: paper.github_url,
+        repoName: paper.github_url ? paper.github_url.split('/').pop() : '',
+        stars: paper.github_stars || 0
+    })).filter(paper => {
+        if (fromDate && paper.published < fromDate) return false;
+        if (toDate && paper.published > toDate) return false;
+        return true;
+    });
+}
 
 function sortPapers() {
     switch (sortBy.value) {
