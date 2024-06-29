@@ -113,7 +113,7 @@ async function searchHAL(keyword, fromDate, toDate) {
 }    
 
 async function searchPapersWithCode(keyword, fromDate, toDate) {
-    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const corsProxy = 'https://thingproxy.freeboard.io/fetch/';
     const apiUrl = `https://paperswithcode.com/api/v1/papers/?q=${keyword}&items_per_page=100`;
     const response = await fetch(corsProxy + apiUrl, {
         headers: {
