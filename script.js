@@ -103,14 +103,14 @@ async function searchHAL(keyword, fromDate, toDate) {
     
     return data.response.docs.map(doc => ({
         source: 'HAL',
-        title: doc.title_s,
+        title: Array.isArray(doc.title_s) ? doc.title_s.join('') : doc.title_s,
         authors: doc.authFullName_s,
         published: new Date(doc.publicationDate_s),
         summary: doc.abstract_s,
         pdfUrl: doc.fileMain_s,
         citations: Math.floor(Math.random() * 1000) // Simulated citation count
     }));
-}
+}    
 
 async function searchPapersWithCode(keyword, fromDate, toDate) {
     const corsProxy = 'https://cors-anywhere.herokuapp.com/';
@@ -125,11 +125,11 @@ async function searchPapersWithCode(keyword, fromDate, toDate) {
     return data.results.map(paper => ({
         source: 'Papers with Code',
         title: paper.title,
-        authors: paper.authors.map(author => author.name),
+        authors: paper.authors,
         published: new Date(paper.published),
         summary: paper.abstract,
         pdfUrl: paper.url_pdf,
-        citations: paper.citations || Math.floor(Math.random() * 1000), // Use actual citations if available, otherwise simulate
+        citations: paper.citations || 0, // Use actual citations if available, otherwise simulate
         repoUrl: paper.github_url,
         repoName: paper.github_url ? paper.github_url.split('/').pop() : '',
         stars: paper.github_stars || 0
