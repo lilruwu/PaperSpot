@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PaperSpot</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
 </head>
 <body>
     <header>
@@ -30,16 +31,22 @@
                         <label for="paperswithcode-source">Papers with Code</label>
                     </div>
                 </fieldset>
-                <label for="sort-by">Sort by:</label>
-                <select id="sort-by">
-                    <option value="citations">Relevance</option>
-                    <option value="date">Publication Date</option>
-                    <option value="alphabetical">Alphabetical Order</option>
-                </select>
-                <label for="date-from">From:</label>
-                <input type="date" id="date-from">
-                <label for="date-to">To:</label>
-                <input type="date" id="date-to">
+                <div>
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="citations">Relevance</option>
+                        <option value="date">Publication Date</option>
+                        <option value="alphabetical">Alphabetical Order</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="date-from">From:</label>
+                    <input type="date" id="date-from">
+                </div>
+                <div>
+                    <label for="date-to">To:</label>
+                    <input type="date" id="date-to">
+                </div>
             </div>
         </section>
         <section id="results-section">
@@ -58,11 +65,13 @@
                     <p id="repo-stars"></p>
                     <p id="repo-description"></p>
                 </div>
-                <button id="preview-paper">Open Full Paper</button>
+                <button id="preview-paper">Preview Paper</button>
+                <button id="full-paper-view">Open Full Paper</button>
                 <div id="citation-generator">
                     <h3>Citation</h3>
                     <div class="citation-container">
                         <div class="citation-selector">
+                            <label for="citation-style">Citation Style:</label>
                             <select id="citation-style">
                                 <option value="apa">APA</option>
                                 <option value="mla">MLA</option>
@@ -82,16 +91,22 @@
                 </div>
             </div>
         </section>
-        <section id="preview-section" style="display: none;">
-            <h2>Paper Preview</h2>
-            <div id="paper-preview"></div>
-            <button id="full-paper-view">Full Paper View</button>
-        </section>
     </main>
     <footer>
         <p>&copy; 2024 PaperSpot</p>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+
+    <!-- Modal para la previsualización del PDF -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="paperPreview"></div>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

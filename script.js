@@ -30,7 +30,7 @@ citationStyle.addEventListener('change', () => {
     }
 });
 copyCitationButton.addEventListener('click', copyCitation);
-previewButton.addEventListener('click', openFullPaper);
+previewButton.addEventListener('click', previewPaper);
 fullPaperViewButton.addEventListener('click', openFullPaper);
 
 sourceCheckboxes.forEach(checkbox => {
@@ -101,7 +101,6 @@ async function searchHAL(keyword, fromDate, toDate) {
     const response = await fetch(`https://api.archives-ouvertes.fr/search/?q=${keyword}&wt=json&fl=title_s,authFullName_s,publicationDate_s,abstract_s,fileMain_s,citationFull_s&fq=submittedDate_s:[${fromDate ? fromDate.toISOString() : '*'} TO ${toDate ? toDate.toISOString() : '*'}]`);
     const data = await response.json();
     
-    console.log(data.response.docs);
     return data.response.docs.map(doc => ({
         source: 'HAL',
         title: Array.isArray(doc.title_s) ? doc.title_s.join('') : doc.title_s,
@@ -190,6 +189,7 @@ function showPaperDetails(index) {
     if (currentPaper.source === 'Papers with Code' && currentPaper.repoUrl) {
         document.getElementById('repo-url').innerHTML = `<strong>Repository:</strong> <a href="${currentPaper.repoUrl}" target="_blank">${currentPaper.repoName}</a>`;
         document.getElementById('repo-stars').innerHTML = `<strong>⭐</strong> ${currentPaper.stars}`;
+        document.getElementById('repo-description').textContent = currentPaper.repoDescription;
         repoInfo.style.display = 'block';
     } else {
         repoInfo.style.display = 'none';
@@ -251,6 +251,64 @@ function copyCitation() {
         console.error('Failed to copy citation: ', err);
     });
 }
+
+const modal = document.getElementById("modal");
+const closeButton = document.getElementsByClassName("close-button")[0];
+
+async function previewPaper() {
+    if (currentPaper) {
+        modal.style.display = 'block';
+        const paperPreview = document.getElementById('paperPreview');
+        paperPreview.innerHTML = 'Loading preview...';
+
+        try {
+            const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+            const pdfUrl = currentPaper.pdfUrl;
+            const loadingTask = pdfjsLib.getDocument(corsProxy + pdfUrl);
+            const pdf = await loadingTask.promise;
+
+            const scale = 2;
+            const numPagesToRender = 5;
+
+            paperPreview.innerHTML = '';
+
+            for (let pageNum = 1; pageNum <= numPagesToRender; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const viewport = page.getViewport({ scale });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+
+                paperPreview.appendChild(canvas);
+            }
+        } catch (error) {
+            console.error('Error loading PDF:', error);
+            paperPreview.innerHTML = 'Error loading PDF preview. Please try opening the full paper.';
+        }
+    }
+}
+
+// Evento para cerrar el modal
+closeButton.onclick = function() {
+    modal.style.display = "none";
+};
+
+// Cerrar el modal si se hace clic fuera del contenido
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
+
 
 function openFullPaper() {
     if (currentPaper) {
