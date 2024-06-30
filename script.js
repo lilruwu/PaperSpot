@@ -113,7 +113,7 @@ async function searchHAL(keyword, fromDate, toDate) {
 }    
 
 async function searchPapersWithCode(keyword, fromDate, toDate) {
-    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    const corsProxy = 'https://paperspot.rcg4ueducation.workers.dev/?target=';
     const apiUrl = `https://paperswithcode.com/api/v1/search/?q=${keyword}&items_per_page=10`;
     const response = await fetch(corsProxy + apiUrl, {
         headers: {
@@ -262,7 +262,7 @@ async function previewPaper() {
         paperPreview.innerHTML = 'Loading preview...';
 
         try {
-            const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+            const corsProxy = 'https://paperspot.rcg4ueducation.workers.dev/?target=';
             const pdfUrl = currentPaper.pdfUrl;
             const loadingTask = pdfjsLib.getDocument(corsProxy + pdfUrl);
             const pdf = await loadingTask.promise;
